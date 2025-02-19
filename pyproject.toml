@@ -1,0 +1,8 @@
+[project]
+name = "microsoft-store-scraper"
+version = "0.0.1"
+description = "Microsoft-Store-Scraper provides APIs to easily crawl the Microsoft Store for Python without any external dependencies!"
+authors = ["smitk85143 <smitk85143@gmail.com>"]
+readme = "README.md"
+requires-python = ">=3.11"
+repository = "https://github.com/smitk85143/microsoft-store-scraper"

@@ -1,0 +1,7 @@
+version = 1
+requires-python = ">=3.11"
+
+[[package]]
+name = "microsoft-store-scraper"
+version = "0.0.1"
+source = { virtual = "." }
