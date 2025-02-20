@@ -8,6 +8,16 @@ from microsoft_store_scraper.utils.request import get
 
 
 def app(app_id: str, lang: str = "en-us", country: str = "US") -> Dict[str, Any]:
+    """
+    Get the app details based on the app id.
+
+    :param app_id: The app id.
+    :param lang: The language.
+    :param country: The country.
+
+    :return: The app details.
+
+    """
     url = Formats.Detail.build(app_id=app_id, lang=lang, country=country)
 
     try:

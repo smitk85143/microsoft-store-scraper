@@ -1,8 +1,15 @@
 [project]
 name = "microsoft-store-scraper"
-version = "0.0.1"
+version = "0.0.2"
 description = "Microsoft-Store-Scraper provides APIs to easily crawl the Microsoft Store for Python without any external dependencies!"
-authors = ["smitk85143 <smitk85143@gmail.com>"]
+authors = [
+    { name = "smitk85143", email = "smitk85143@gmail.com" }
+]
+license = "MIT"
 readme = "README.md"
 requires-python = ">=3.11"
-repository = "https://github.com/smitk85143/microsoft-store-scraper"
+urls = { "Homepage" = "https://github.com/smitk85143/microsoft-store-scraper" }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
