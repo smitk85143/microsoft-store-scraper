@@ -57,6 +57,54 @@ class Formats:
         def build_body(self, *args):
             return None
         
+    
+    class _PublisherResults(Format):
+        URL_FORMAT = (
+            "{}/api/Products/SearchByPublisherName?publisherName={{publisher_name}}&hl={{lang}}&gl={{country}}".format(
+                MICROSOFT_STORE_BASE_URL
+            )
+        )
+        FALLBACK_URL_FORMAT = "{}/api/Products/SearchByPublisherName?publisherName={{publisher_name}}&hl={{lang}}".format(
+            MICROSOFT_STORE_BASE_URL
+        )
+
+        def build(self, publisher_name: str, lang: str, country: str, cursor: str = None) -> str:
+            if cursor:
+                return self.URL_FORMAT.format(publisher_name=publisher_name, lang=lang, country=country) + f"&cursor={cursor}"
+            return self.URL_FORMAT.format(publisher_name=publisher_name, lang=lang, country=country)
+
+        def fallback_build(self, publisher_name: str, lang: str, cursor: str = None) -> str:
+            if cursor:
+                return self.URL_FORMAT.format(publisher_name=publisher_name, lang=lang) + f"&cursor={cursor}"
+            return self.FALLBACK_URL_FORMAT.format(publisher_name=publisher_name, lang=lang)
+
+        def build_body(self, *args):
+            return None
+        
+    
+    class _Collectionresults(Format):
+        URL_FORMAT = (
+            "{}/api/Reco/GetComputedProductsList?listName={{list_name}}&media_type={{media_type}}&pgNo={{pgNo}}&filteredCategories=AllProducts&discountFilter=&subcategoryFilter=&gl={{lang}}&hl={{country}}".format(
+                MICROSOFT_STORE_BASE_URL
+            )
+        )
+        FALLBACK_URL_FORMAT = (
+            "{}/api/Reco/GetComputedProductsList?listName={{list_name}}&media_type={{media_type}}&pgNo={{pgNo}}&filteredCategories=AllProducts&discountFilter=&subcategoryFilter=&gl={{lang}}".format(
+                MICROSOFT_STORE_BASE_URL
+            )
+        )
+
+        def build(self, list_name: str, media_type: str, lang: str, country: str, pg_no: int) -> str:
+            return self.URL_FORMAT.format(list_name=list_name, media_type=media_type, lang=lang, country=country, pgNo=pg_no)
+
+        def fallback_build(self, list_name: str, media_type:str, lang: str, pg_no: int) -> str:
+            return self.FALLBACK_URL_FORMAT.format(list_name=list_name, media_type=media_type, lang=lang, pgNo=pg_no)
+
+        def build_body(self, *args):
+            return None
+        
 
     Detail = _Detail()
     Searchresults = _Searchresults()
+    PublisherResults = _PublisherResults()
+    Collectionresults = _Collectionresults()
