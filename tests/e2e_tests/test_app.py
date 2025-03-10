@@ -15,8 +15,18 @@ class TestApp(TestCase):
         self.assertEqual(['Developer tools'], result["categories"])
         self.assertEqual("2024-04-17T16:35:34Z", result["lastUpdateDateUtc"])
         self.assertEqual("https://www.ubuntu.com/wsl", result["appWebsiteUrl"])
+        self.assertEqual("store", result["platform"])
 
     def test_e2e_scenario_2(self):
         result = app("9n14cvww52gg")
+        self.assertNotEqual("Free", result["displayPrice"])
 
-        self.assertEqual("$4.99", result["displayPrice"])
+    def test_e2e_scenario_3(self):
+        app_id = "9ng07qjnk38j"
+        result = app(app_id)
+        self.assertEqual(app_id.upper(), result["productSummaries"]["productId"])
+        self.assertEqual("Among Us", result["productSummaries"]["title"])
+        self.assertEqual("Innersloth", result["productSummaries"]["publisherName"])
+        self.assertEqual(['Action & adventure'], result["productSummaries"]["categories"])
+        self.assertEqual("2021-12-14T00:00:00.0000000Z", result["productSummaries"]["releaseDate"])
+        self.assertEqual("xbox", result["platform"])

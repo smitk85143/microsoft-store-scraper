@@ -25,18 +25,33 @@ def app(app_id: str, lang: str = "en-us", country: str = "US") -> Dict[str, Any]
     except NotFoundError:
         url = Formats.Detail.fallback_build(app_id=app_id, lang=lang)
         dom = get(url)
-    return parse_dom(dom=dom, app_id=app_id, url=url)
+    return parse_dom(dom=dom, app_id=app_id)
 
 
-def parse_dom(dom: str, app_id: str, url: str) -> Dict[str, Any]:
-    
+def parse_dom(dom: str, app_id: str) -> Dict[str, Any]:
     matches = Regex.SCRIPT.findall(dom)
 
     if matches:
-        metadata_dict = json.loads(matches[0])
-        metadata_dict["appId"] = app_id
-        metadata_dict["url"] = url
-
+        try:
+            metadata_dict = json.loads(matches[0])
+        except json.JSONDecodeError:
+            raise NotFoundError("Failed to decode JSON from the app details.")
+        metadata_dict['platform'] = "store"
         return metadata_dict
+    
+    matches = Regex.XBOX_SCRIPT.findall(dom)
+
+    if matches:
+        metadata_dict = json.loads(matches[0])
+        upper_app_id = app_id.upper()
+        result = {}
+        result["productSummaries"] = metadata_dict.get('core2', {}).get('products', {}).get('productSummaries', {}).get(upper_app_id, {})
+        result["additionalInformation"] = metadata_dict.get('core2', {}).get('products', {}).get('additionalInformation', {}).get(upper_app_id, {})
+        result["availabilitySummaries"] = metadata_dict.get('core2', {}).get('products', {}).get('availabilitySummaries', {}).get(upper_app_id, {})
+        result["skuSummaries"] = metadata_dict.get('core2', {}).get('products', {}).get('skuSummaries', {}).get(upper_app_id, {})
+        result['platform'] = "xbox"
+
+        return result
+
     else:
         raise NotFoundError("The app was not found.")
